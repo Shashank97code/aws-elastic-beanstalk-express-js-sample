@@ -1,8 +1,21 @@
-const express = require('express');
+const fs = require("fs");
+const https = require("https");
+const express = require("express");
+
+const options = {
+  key: fs.readFileSync("./private_file/private-key.pem"),
+  cert: fs.readFileSync("./private_file/certificate.pem"),
+};
+
 const app = express();
-const port = 8080;
 
-app.get('/', (req, res) => res.send('Hello World!'));
+// Define a route with the GET method
+app.get("/", (req, res) => {
+  res.send("Welcome to the HTTPS Server App...!!");
+});
 
-app.listen(port);
-console.log(`App running on http://localhost:${port}`);
+const server = https.createServer(options, app);
+
+server.listen(443, () => {
+  console.log("Server running on https://localhost/");
+});
